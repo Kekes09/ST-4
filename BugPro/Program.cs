@@ -5,7 +5,8 @@ namespace BugPro
 {
     public enum BugState
     {
-        NewDefect, Triage, Fixing, Testing, Closed, Reopened, Deferred, CannotReproduce, Returned
+        NewDefect, Triage, Fixing, Testing, Closed, Reopened, Deferred,
+        Duplicate, NotABug, CannotReproduce, Returned
     }
 
     public enum BugTrigger
