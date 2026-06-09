@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E1FC1FCC-081C-4444-BC16-32C5C737EAFF}|BugTest\\BugTest.csproj|c:\\users\\evgenii\\source\\repos\\st-4\\bugtest\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1FC1FCC-081C-4444-BC16-32C5C737EAFF}|BugTest\\BugTest.csproj|solutionrelative:bugtest\\test1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCA8CA82-7665-45FD-9B83-358DCEFCE7E4}|BugPro\\BugPro.csproj|c:\\users\\evgenii\\source\\repos\\st-4\\bugpro\\bugpro.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{BCA8CA82-7665-45FD-9B83-358DCEFCE7E4}|BugPro\\BugPro.csproj|solutionrelative:bugpro\\bugpro.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCA8CA82-7665-45FD-9B83-358DCEFCE7E4}|BugPro\\BugPro.csproj|c:\\users\\evgenii\\source\\repos\\st-4\\bugpro\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BCA8CA82-7665-45FD-9B83-358DCEFCE7E4}|BugPro\\BugPro.csproj|solutionrelative:bugpro\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1FC1FCC-081C-4444-BC16-32C5C737EAFF}|BugTest\\BugTest.csproj|c:\\users\\evgenii\\source\\repos\\st-4\\bugtest\\bugtest.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{E1FC1FCC-081C-4444-BC16-32C5C737EAFF}|BugTest\\BugTest.csproj|solutionrelative:bugtest\\bugtest.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BugTest",
+              "DocumentMoniker": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugTest\\BugTest.csproj",
+              "RelativeDocumentMoniker": "BugTest\\BugTest.csproj",
+              "ToolTip": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugTest\\BugTest.csproj",
+              "RelativeToolTip": "BugTest\\BugTest.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-09T15:55:52.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Test1.cs",
+              "DocumentMoniker": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugTest\\Test1.cs",
+              "RelativeDocumentMoniker": "BugTest\\Test1.cs",
+              "ToolTip": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugTest\\Test1.cs",
+              "RelativeToolTip": "BugTest\\Test1.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAIwAUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T15:55:42.81Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BugPro",
+              "DocumentMoniker": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\BugPro.csproj",
+              "RelativeDocumentMoniker": "BugPro\\BugPro.csproj",
+              "ToolTip": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\BugPro.csproj",
+              "RelativeToolTip": "BugPro\\BugPro.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-09T15:53:24.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BugPro.GlobalUsings.g.cs",
+              "DocumentMoniker": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs",
+              "RelativeDocumentMoniker": "BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs",
+              "ToolTip": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs",
+              "RelativeToolTip": "BugPro\\obj\\Debug\\net8.0\\BugPro.GlobalUsings.g.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T15:53:19.916Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\Program.cs",
+              "RelativeDocumentMoniker": "BugPro\\Program.cs",
+              "ToolTip": "C:\\Users\\Evgenii\\source\\repos\\ST-4\\BugPro\\Program.cs",
+              "RelativeToolTip": "BugPro\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T15:52:40.112Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

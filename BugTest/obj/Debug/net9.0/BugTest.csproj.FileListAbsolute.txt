@@ -1,0 +1,7 @@
+C:\Users\Evgenii\source\repos\ST-4\BugTest\bin\Debug\net9.0\CoverletSourceRootsMapping_BugTest
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.csproj.AssemblyReference.cache
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.AssemblyInfoInputs.cache
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.AssemblyInfo.cs
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.csproj.CoreCompileInputs.cache
+C:\Users\Evgenii\source\repos\ST-4\BugTest\obj\Debug\net9.0\BugTest.sourcelink.json
