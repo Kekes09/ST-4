@@ -1,331 +1,206 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BugPro;
-using Stateless;
 
-namespace BugTests
+namespace BugTest
 {
     [TestClass]
-    public class UnitTest1
+    public class Test1
     {
         [TestMethod]
-        public void InitialState_IsNewDefect()
+        public void Init_IsNewDefect()
         {
-            var bug = new Bug("Test Bug");
-            Assert.AreEqual(State.NewDefect, bug.CurrentState);
+            var item = new Bug("A");
+            Assert.AreEqual(BugState.NewDefect, item.CurrentState);
         }
 
         [TestMethod]
-        public void Assign_FromNewDefect_GoesToTriage()
+        public void Assign_GoesToTriage()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            Assert.AreEqual(BugState.Triage, item.CurrentState);
         }
 
         [TestMethod]
-        public void StartFix_FromTriage_GoesToFixing()
+        public void StartFix_GoesToFixing()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            Assert.AreEqual(State.Fixing, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            Assert.AreEqual(BugState.Fixing, item.CurrentState);
         }
 
         [TestMethod]
-        public void NotADefect_FromTriage_GoesToNotABug()
+        public void FixDone_GoesToTesting()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.NotADefect);
-            Assert.AreEqual(State.NotABug, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.FixDone);
+            Assert.AreEqual(BugState.Testing, item.CurrentState);
         }
 
         [TestMethod]
-        public void WontFix_FromTriage_GoesToClosed()
+        public void TestPass_GoesToClosed()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.WontFix);
-            Assert.AreEqual(State.Closed, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.FixDone);
+            item.Fire(BugTrigger.TestPass);
+            Assert.AreEqual(BugState.Closed, item.CurrentState);
         }
 
         [TestMethod]
-        public void Duplicate_FromTriage_GoesToDuplicate()
+        public void TestFail_GoesToFixing()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.Duplicate);
-            Assert.AreEqual(State.Duplicate, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.FixDone);
+            item.Fire(BugTrigger.TestFail);
+            Assert.AreEqual(BugState.Fixing, item.CurrentState);
         }
 
         [TestMethod]
-        public void Defer_FromTriage_GoesToDeferred()
+        public void Reopen_GoesToReopened()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.Defer);
-            Assert.AreEqual(State.Deferred, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.FixDone);
+            item.Fire(BugTrigger.TestPass);
+            item.Fire(BugTrigger.Reopen);
+            Assert.AreEqual(BugState.Reopened, item.CurrentState);
         }
 
         [TestMethod]
-        public void FixCompleted_FromFixing_GoesToTesting()
+        public void ReopenedAssign_GoesToTriage()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            Assert.AreEqual(State.Testing, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.FixDone);
+            item.Fire(BugTrigger.TestPass);
+            item.Fire(BugTrigger.Reopen);
+            item.Fire(BugTrigger.Assign);
+            Assert.AreEqual(BugState.Triage, item.CurrentState);
         }
 
         [TestMethod]
-        public void TestPassed_FromTesting_GoesToClosed()
+        public void MarkDuplicate_GoesToClosed()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            bug.Fire(Trigger.TestPassed);
-            Assert.AreEqual(State.Closed, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.MarkDuplicate);
+            Assert.AreEqual(BugState.Closed, item.CurrentState);
         }
 
         [TestMethod]
-        public void TestFailed_FromTesting_GoesToFixing()
+        public void MarkNotBug_GoesToClosed()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            bug.Fire(Trigger.TestFailed);
-            Assert.AreEqual(State.Fixing, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.MarkNotBug);
+            Assert.AreEqual(BugState.Closed, item.CurrentState);
         }
 
         [TestMethod]
-        public void Reopen_FromClosed_GoesToReopened()
+        public void MarkCannotReproduce_GoesToState()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            bug.Fire(Trigger.TestPassed);
-            bug.Fire(Trigger.Reopen);
-            Assert.AreEqual(State.Reopened, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.MarkCannotReproduce);
+            Assert.AreEqual(BugState.CannotReproduce, item.CurrentState);
         }
 
         [TestMethod]
-        public void StartFix_FromReopened_GoesToFixing()
+        public void CR_OK_GoesToClosed()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            bug.Fire(Trigger.TestPassed);
-            bug.Fire(Trigger.Reopen);
-            bug.Fire(Trigger.StartFix);
-            Assert.AreEqual(State.Fixing, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.MarkCannotReproduce);
+            item.Fire(BugTrigger.CR_OK);
+            Assert.AreEqual(BugState.Closed, item.CurrentState);
         }
 
         [TestMethod]
-        public void NoTimeNow_FromFixing_GoesToDeferred()
+        public void CR_Fail_GoesToReturned()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.NoTimeNow);
-            Assert.AreEqual(State.Deferred, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.MarkCannotReproduce);
+            item.Fire(BugTrigger.CR_Fail);
+            Assert.AreEqual(BugState.Returned, item.CurrentState);
         }
 
         [TestMethod]
-        public void NeedsSeparateSolution_FromFixing_GoesToTriage()
+        public void NoTime_GoesToDeferred()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.NeedsSeparateSolution);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.NoTime);
+            Assert.AreEqual(BugState.Deferred, item.CurrentState);
         }
 
         [TestMethod]
-        public void OtherProductProblem_FromFixing_GoesToTriage()
+        public void DeferredAssign_GoesToTriage()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.OtherProductProblem);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.StartFix);
+            item.Fire(BugTrigger.NoTime);
+            item.Fire(BugTrigger.Assign);
+            Assert.AreEqual(BugState.Triage, item.CurrentState);
         }
 
         [TestMethod]
-        public void NeedMoreInfo_FromFixing_GoesToTriage()
+        public void CanFire_Valid_ReturnsTrue()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.NeedMoreInfo);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
+            var item = new Bug("A");
+            Assert.IsTrue(item.CanFire(BugTrigger.Assign));
         }
 
         [TestMethod]
-        public void CannotReproduce_FromTriage_GoesToCannotReproduce()
+        public void CanFire_Invalid_ReturnsFalse()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.CannotReproduce);
-            Assert.AreEqual(State.CannotReproduce, bug.CurrentState);
-        }
-
-        [TestMethod]
-        public void CannotReproduceOK_FromCannotReproduce_GoesToClosed()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.CannotReproduce);
-            bug.Fire(Trigger.CannotReproduceOK);
-            Assert.AreEqual(State.Closed, bug.CurrentState);
-        }
-
-        [TestMethod]
-        public void CannotReproduceNotOK_FromCannotReproduce_GoesToReturned()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.CannotReproduce);
-            bug.Fire(Trigger.CannotReproduceNotOK);
-            Assert.AreEqual(State.Returned, bug.CurrentState);
-        }
-
-        [TestMethod]
-        public void Assign_FromDeferred_GoesToTriage()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.Defer);
-            bug.Fire(Trigger.Assign);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
+            var item = new Bug("A");
+            Assert.IsFalse(item.CanFire(BugTrigger.StartFix));
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_StartFix_FromNewDefect_ThrowsException()
+        public void Invalid_StartFix_FromNew_Throws()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.StartFix);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.StartFix);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_FixCompleted_FromNewDefect_ThrowsException()
+        public void Invalid_FixDone_FromTriage_Throws()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.FixCompleted);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Assign);
+            item.Fire(BugTrigger.FixDone);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_TestPassed_FromNewDefect_ThrowsException()
+        public void Invalid_Reopen_FromNew_Throws()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.TestPassed);
+            var item = new Bug("A");
+            item.Fire(BugTrigger.Reopen);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_Reopen_FromNewDefect_ThrowsException()
+        public void Props_AreSet()
         {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Reopen);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_Assign_FromTriage_ThrowsException()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.Assign);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_StartFix_FromFixing_ThrowsException()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.StartFix);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_FixCompleted_FromClosed_ThrowsException()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.WontFix);
-            bug.Fire(Trigger.FixCompleted);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Invalid_TestFailed_FromNewDefect_ThrowsException()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.TestFailed);
-        }
-
-        [TestMethod]
-        public void BugProperties_AreSetCorrectly()
-        {
-            var bug = new Bug("My Bug Title", "My Bug Description");
-            Assert.AreEqual("My Bug Title", bug.Title);
-            Assert.AreEqual("My Bug Description", bug.Description);
-        }
-
-        [TestMethod]
-        public void CanFire_ReturnsTrueForValidTransition()
-        {
-            var bug = new Bug("Test Bug");
-            Assert.IsTrue(bug.CanFire(Trigger.Assign));
-        }
-
-        [TestMethod]
-        public void CanFire_ReturnsFalseForInvalidTransition()
-        {
-            var bug = new Bug("Test Bug");
-            Assert.IsFalse(bug.CanFire(Trigger.StartFix));
-        }
-
-        [TestMethod]
-        public void CompleteWorkflow_NewToClosed()
-        {
-            var bug = new Bug("Test Bug");
-            Assert.AreEqual(State.NewDefect, bug.CurrentState);
-
-            bug.Fire(Trigger.Assign);
-            Assert.AreEqual(State.Triage, bug.CurrentState);
-
-            bug.Fire(Trigger.StartFix);
-            Assert.AreEqual(State.Fixing, bug.CurrentState);
-
-            bug.Fire(Trigger.FixCompleted);
-            Assert.AreEqual(State.Testing, bug.CurrentState);
-
-            bug.Fire(Trigger.TestPassed);
-            Assert.AreEqual(State.Closed, bug.CurrentState);
-        }
-
-        [TestMethod]
-        public void ReopenWorkflow_ClosedToReopenedToFixing()
-        {
-            var bug = new Bug("Test Bug");
-            bug.Fire(Trigger.Assign);
-            bug.Fire(Trigger.StartFix);
-            bug.Fire(Trigger.FixCompleted);
-            bug.Fire(Trigger.TestPassed);
-            bug.Fire(Trigger.Reopen);
-            bug.Fire(Trigger.StartFix);
-
-            Assert.AreEqual(State.Fixing, bug.CurrentState);
+            var item = new Bug("X", "Y");
+            Assert.AreEqual("X", item.Title);
+            Assert.AreEqual("Y", item.Description);
         }
     }
 }

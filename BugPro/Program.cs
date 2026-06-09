@@ -3,115 +3,82 @@ using Stateless;
 
 namespace BugPro
 {
-    public enum State
+    public enum BugState
     {
-        NewDefect,
-        Triage,
-        Fixing,
-        Testing,
-        Closed,
-        Reopened,
-        Deferred,
-        CannotReproduce,
-        Returned
+        NewDefect, Triage, Fixing, Testing, Closed, Reopened, Deferred, CannotReproduce, Returned
     }
 
-    public enum Trigger
+    public enum BugTrigger
     {
-        Assign,
-        StartFix,
-        Duplicate,
-        NotABug,
-        WontFix,
-        CannotReproduce,
-        CannotReproduceOk,
-        CannotReproduceFail,
-        NoTimeNow,
-        NeedMoreInfo,
-        FixCompleted,
-        TestPassed,
-        TestFailed,
-        ProblemSolved,
-        Reopen,
-        
+        Assign, StartFix, MarkDuplicate, MarkNotBug, MarkWontFix,
+        MarkCannotReproduce, CR_OK, CR_Fail, NoTime, NeedInfo,
+        FixDone, TestPass, TestFail, Reopen, ReturnTriage, Defer,
+        NeedSolution, OtherProduct
     }
 
     public class Bug
     {
-        private readonly StateMachine<State, Trigger> _machine;
+        private readonly StateMachine<BugState, BugTrigger> _stateMachine;
+        public string Title { get; }
+        public string Description { get; }
+        public BugState CurrentState => _stateMachine.State;
 
-        public State CurrentState => _machine.State;
-
-        public Bug()
+        public Bug(string title, string description = "")
         {
-            _machine = new StateMachine<State, Trigger>(State.NewDefect);
+            Title = title;
+            Description = description;
+            _stateMachine = new StateMachine<BugState, BugTrigger>(BugState.NewDefect);
 
-            _machine.Configure(State.NewDefect)
-                .Permit(Trigger.Assign, State.Triage);
+            _stateMachine.Configure(BugState.NewDefect)
+                .Permit(BugTrigger.Assign, BugState.Triage);
 
-            _machine.Configure(State.Triage)
-                .Permit(Trigger.StartFix, State.Fixing)
-                .Permit(Trigger.Duplicate, State.Closed)
-                .Permit(Trigger.NotABug, State.Closed)
-                .Permit(Trigger.WontFix, State.Closed)
-                .Permit(Trigger.CannotReproduce, State.CannotReproduce);
+            _stateMachine.Configure(BugState.Triage)
+                .Permit(BugTrigger.StartFix, BugState.Fixing)
+                .Permit(BugTrigger.MarkDuplicate, BugState.Closed)
+                .Permit(BugTrigger.MarkNotBug, BugState.Closed)
+                .Permit(BugTrigger.MarkWontFix, BugState.Closed)
+                .Permit(BugTrigger.MarkCannotReproduce, BugState.CannotReproduce)
+                .Permit(BugTrigger.Defer, BugState.Deferred);
 
-            _machine.Configure(State.Fixing)
-                .Permit(Trigger.FixCompleted, State.Testing)
-                .Permit(Trigger.NoTimeNow, State.Deferred)
-                .Permit(Trigger.NeedMoreInfo, State.Triage);
+            _stateMachine.Configure(BugState.Fixing)
+                .Permit(BugTrigger.FixDone, BugState.Testing)
+                .Permit(BugTrigger.NoTime, BugState.Deferred)
+                .Permit(BugTrigger.NeedInfo, BugState.Triage)
+                .Permit(BugTrigger.NeedSolution, BugState.Triage)
+                .Permit(BugTrigger.OtherProduct, BugState.Triage);
 
-            _machine.Configure(State.Testing)
-                .Permit(Trigger.TestPassed, State.Closed)
-                .Permit(Trigger.TestFailed, State.Fixing)
-                .Permit(Trigger.ProblemSolved, State.Reopened);
+            _stateMachine.Configure(BugState.Testing)
+                .Permit(BugTrigger.TestPass, BugState.Closed)
+                .Permit(BugTrigger.TestFail, BugState.Fixing)
+                .Permit(BugTrigger.CR_OK, BugState.Closed)
+                .Permit(BugTrigger.CR_Fail, BugState.Returned);
 
-            _machine.Configure(State.Closed)
-                .Permit(Trigger.Reopen, State.Reopened);
+            _stateMachine.Configure(BugState.Closed)
+                .Permit(BugTrigger.Reopen, BugState.Reopened);
 
-            _machine.Configure(State.Reopened)
-                .Permit(Trigger.Assign, State.Triage);
+            _stateMachine.Configure(BugState.Reopened)
+                .Permit(BugTrigger.Assign, BugState.Triage)
+                .Permit(BugTrigger.ReturnTriage, BugState.Triage);
 
-            _machine.Configure(State.Deferred)
-                .Permit(Trigger.Assign, State.Triage);
+            _stateMachine.Configure(BugState.Deferred)
+                .Permit(BugTrigger.Assign, BugState.Triage);
 
-            _machine.Configure(State.CannotReproduce)
-                .Permit(Trigger.CannotReproduceOk, State.Closed)
-                .Permit(Trigger.CannotReproduceFail, State.Returned);
-
-            _machine.Configure(State.Returned)
-                .Permit(Trigger.Assign, State.Triage);
+            _stateMachine.Configure(BugState.Returned)
+                .Permit(BugTrigger.Assign, BugState.Triage);
         }
 
-        public void Fire(Trigger trigger)
-        {
-            _machine.Fire(trigger);
-        }
-
-        public bool CanFire(Trigger trigger)
-        {
-            return _machine.CanFire(trigger);
-        }
+        public void Fire(BugTrigger trigger) => _stateMachine.Fire(trigger);
+        public bool CanFire(BugTrigger trigger) => _stateMachine.CanFire(trigger);
     }
 
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var bug = new Bug();
-            Console.WriteLine($"State: {bug.CurrentState}");
-
-            bug.Fire(Trigger.Assign);
-            Console.WriteLine($"State: {bug.CurrentState}");
-
-            bug.Fire(Trigger.StartFix);
-            Console.WriteLine($"State: {bug.CurrentState}");
-
-            bug.Fire(Trigger.FixCompleted);
-            Console.WriteLine($"State: {bug.CurrentState}");
-
-            bug.Fire(Trigger.TestPassed);
-            Console.WriteLine($"State: {bug.CurrentState}");
+            var item = new Bug("Sample", "Desc");
+            Console.WriteLine($"Init: {item.CurrentState}");
+            item.Fire(BugTrigger.Assign);
+            Console.WriteLine($"Next: {item.CurrentState}");
         }
     }
 }
