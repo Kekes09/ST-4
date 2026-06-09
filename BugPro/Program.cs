@@ -50,7 +50,9 @@ namespace BugPro
 
             _stateMachine.Configure(BugState.Testing)
                 .Permit(BugTrigger.TestPass, BugState.Closed)
-                .Permit(BugTrigger.TestFail, BugState.Fixing)
+                .Permit(BugTrigger.TestFail, BugState.Fixing);
+
+            _stateMachine.Configure(BugState.CannotReproduce)
                 .Permit(BugTrigger.CR_OK, BugState.Closed)
                 .Permit(BugTrigger.CR_Fail, BugState.Returned);
 
